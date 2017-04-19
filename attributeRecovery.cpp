@@ -4,6 +4,20 @@
  * Author: (work under conference submission about a paper entitled ``Inference Attacks on Searchable Encrypted Relational Databases")
  *
  * Created on March 14, 2017, 5:24 PM
+ 
+ 
+ The co-occurrence matrix has been computed and saved in a file called observed287.txt. Our program is able to divide most
+ of the queries into classes where each class belongs to a single attribute name. However, regarding attributes sharing the
+ same cardinality such as sex/salary_class with cardinality 2, our program puts the queries belonging into the same attribute 
+ into the same class. Such an approach fails to do the separation for the attributes education/education-num because they 
+ co-exist together in evevery record. That means for every education value, there is always a corresponding eudcation-num value. 
+ Clearly such a scenario will not exist in most relational databases and even if it does, it won't be interesting for an attacker. 
+ However, the education/education-num scenario serves as a good example to show when our attack algorithm can fail.
+ 
+ It takes less than 3 minutes to recover all the discrete attributes. Those with unique cardinality are recovered with probability
+ 1. sex/salary_class values are separated with probability 1 but we cannot tell which set refers to sex and which refers to salary_class
+ since both have same cardinality 2. 
+ 
  */
 
 #include <cstdlib>
