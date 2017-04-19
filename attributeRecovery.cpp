@@ -1,12 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /* 
- * File:   main.cpp
- * Author: Anonymous
+ * File:   attributeRecovery.cpp
+ * Author: (work under conference submission about a paper entitled ``Inference Attacks on Searchable Encrypted Relational Databases")
  *
  * Created on March 14, 2017, 5:24 PM
  */
@@ -52,9 +47,6 @@ public:
     int query_no;
     int result_size;
     vector<Query> *queryList;
-    //bool operator() (Query qi,Query qj) { return (qi.result_size<qj.result_size);}
-    //bool operator() (Query qi,Query qj) { return (qi.queryList->size()<qj.queryList->size());}
-    //bool operator<(const Query &q) const { return queryList->size() < q.queryList->size(); }
 };
 
 bool operator< (Query qi,Query qj) { int xi,xj; if(qi.queryList == NULL) xi = 0; else xi = qi.queryList->size(); if(qj.queryList==NULL) xj=0; else xj = qj.queryList->size(); return xi<xj;}
@@ -206,7 +198,6 @@ int main(int argc, char** argv)
     
     while (infile >> x >> c1 >> y >> c2 >> f)
     {
-    // process pair (a,b)
 
       Ct[x][y] = f;
       Ct[y][x] = f;
@@ -222,12 +213,9 @@ int main(int argc, char** argv)
     
     //for each query q_i, attach all other queries q_j satisfying Ct[q_i][q_j] = 0
     
-    //vector<int> attributes[maxNoQueries+1];
     
     vector<int> queriesSize;
     vector<Query> queries;
-    //vector<Query> queryList[maxNoQueries+1];
-    //Query queriesArray[maxNoQueries+1];
     
     queriesSize.push_back(0);//query number 0 means non-existant query
     
@@ -240,7 +228,6 @@ int main(int argc, char** argv)
     for(int i = 1;i < maxNoQueries+1;i++)
     {
         
-        //attributes[i].push_back(i);
         
         Query qi;
         
@@ -249,7 +236,6 @@ int main(int argc, char** argv)
         
         qi.queryList = new vector<Query>();
         
-        //queryList[i].push_back(qi);
         qi.queryList->push_back(qi);
         
         for(int j = 1;j < maxNoQueries+1;j++)
@@ -257,7 +243,6 @@ int main(int argc, char** argv)
             
             if(Ct[i][j] == 0)
             {
-               //attributes[i].push_back(j);
                Query qj;
                qj.query_no = j;
                qj.result_size = Ct[j][j];
@@ -270,19 +255,15 @@ int main(int argc, char** argv)
         queriesSize.push_back(qi.queryList->size());
         
         queries.push_back(qi);
-        //queriesArray[i] = qi;
         
         
     }
-    
-    //for(int i = 1;i < maxNoQueries+1;i++)     
-       //cout<<"i = "<<i<< ":" <<queriesSize[i]<<endl;
     
     
     
     //sort the queries according to their result sizes
     
-    //Query q;
+ 
     
     std::sort (queries.begin(), queries.end());
     
@@ -378,13 +359,12 @@ int main(int argc, char** argv)
     
     //queries is L in Algorithm 1
     cout<<"Choose the attribute with smallest cardinality as the target attribute from the list below."<<endl;
+    
     for(int i = 0;i < targetAttributes.size();i++)
         cout<<i+1<<":"<<targetAttributes[i].name<<","<<targetAttributes[i].cardinality<<endl;
     
     
     int ctr = 0;
-    
-    //int resolvedAttributes = 0;
     
     int attempts = 0;
     
@@ -435,7 +415,6 @@ int main(int argc, char** argv)
           {
               
              
-             //do{
              vector<Query> p;
     
              p.push_back(currentQueryList[0]); //let each solution include the first element in queryList since sum = number_of_records-queryList[0].resultsize
@@ -461,15 +440,7 @@ int main(int argc, char** argv)
                total_no_of_solutions += no_solutions;
                no_solutions = 0;
            
-               //break;
-               //ctr++;
           
-               
-               // print out content:
-               /*std::cout << "New Queries vector contains:";
-               for (int i = 0;i < queries.size();i++)
-                  std::cout << ' ' << queries[i];
-               std::cout << '\n';*/
                 
              }
              else if(no_solutions > 1)
@@ -494,23 +465,8 @@ int main(int argc, char** argv)
           
                no_solutions = 0;
                
-               //ctr++;
-               //break;
              }
-             /*else
-             {
-                 target_cardinality++;
-                 
-                  //increase or decrease the cardinality
-              
-                 cout<<"Increase the cardinality to "<< target_cardinality<<" and try again...\n";
-                 cout<<"////////////////////////////////////////////////////////////////////////////\n";
-                 //ctr = 1;
-                 //ctr++;
-                 
-             }*/
-          
-             //}while(target_cardinality <= currentQueryList.size());
+            
            
            
                 
@@ -518,18 +474,14 @@ int main(int argc, char** argv)
           
       }        
       else 
-      {
-              cout<<"There are no subsets with sum "<<number_of_records<<" in the current list whose head is "<<currentQueryList[0]<<". Try next list."<<endl;
+          cout<<"There are no subsets with sum "<<number_of_records<<" in the current list whose head is "<<currentQueryList[0]<<". Try next list."<<endl;
              
-              
-              //ctr++;
-      }
-          
+ 
              
              
       
       
-      if(attempts == targetAttributes[0].attempts_to_resolve) //MaxNoAttempts)
+      if(attempts == targetAttributes[0].attempts_to_resolve) 
       {
          cout<<attempts<<" different lists out of 287 lists have been examined in order to resolve a set of queries whose card. is "<<targetAttributes[0].cardinality<<". Next we look for another set of queries whose card. is "<<targetAttributes[1].cardinality<<endl;
          cout<<"Total number of solutions found = "<<total_no_of_solutions<<". Note that solutions found in different attempts might be similar (i.e. just another solution where the order of elements is different)."<<endl;
