@@ -1,7 +1,8 @@
 
 /* 
  * File:   attributeRecovery.cpp
- * Author: (work under conference submission about a paper entitled ``Inference Attacks on Searchable Encrypted Relational Databases")
+ * Author: (work under conference submission about a paper entitled ``Inference Attacks on Searchable Encrypted Relational
+            Databases")
  *
  * Created on March 14, 2017, 5:24 PM
  
